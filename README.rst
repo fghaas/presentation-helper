@@ -16,3 +16,4 @@ presentation frameworks.
 .. |pypi| image:: https://img.shields.io/pypi/v/presentation-helper.svg?style=flat
 .. |travis| image:: https://img.shields.io/travis/fghaas/presentation-helper.svg?style=flat
 .. |codecov| image:: https://img.shields.io/codecov/c/github/fghaas/presentation-helper.svg?style=flat
+
