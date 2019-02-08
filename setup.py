@@ -30,6 +30,6 @@ with open(README) as readme:
         ],
         install_requires=[
             'Jinja2>=2.8',
-            'PyYAML>=3,<4',
-        ],
+            'PyYAML>=4.2b1'
+        ]
     )
