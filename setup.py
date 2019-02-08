@@ -32,7 +32,7 @@ with open(README) as readme:
             'presentationhelper',
         ],
         install_requires=[
-            'Jinja2>=2.8',
+            'Jinja2>=2.9',
             'PyYAML>=4.2b1'
         ]
     )

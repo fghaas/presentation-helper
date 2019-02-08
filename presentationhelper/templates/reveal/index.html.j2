@@ -97,6 +97,7 @@ for (var i = 0; i < n; i++) {
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
+
     controls: {{ controls.enable | default(true)| lower }},
     controlsTutorial: {{ controls.tutorial | default(true) | lower }},
     controlsLayout: '{{ controls.layout | default("bottom-right") }}',
@@ -127,10 +128,9 @@ Reveal.initialize({
     },
 {% endif %}
 
-    keyboard: {
-         40: 'next',
-         38: 'prev'
-    },
+{% if keyboard is defined %}
+{{ keyboard | tojson }},
+{% endif %}
 
 {% if multiplex is defined %}
     multiplex: {
@@ -162,16 +162,19 @@ Reveal.initialize({
     ]
 });
 
-      // If we wanted mouse clicks to advance to next / previous slides, this is
-      // how we'd do it:
-
-      // window.addEventListener("mousedown", handleClick, false);
-      // window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+{% if mouse is defined %}
+      window.addEventListener("mousedown", handleClick, false);
+      window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
       function handleClick(e) {
           e.preventDefault();
+{% if mouse.next %}
           if(e.button === 0) Reveal.next();
-          // if(e.button === 2) Reveal.prev();
+{% endif %}
+{% if mouse.prev %}
+          if(e.button === 2) Reveal.prev();
+{% endif %}
       }
+{% endif %}
     </script>
   </body>
 </html>
