@@ -2,6 +2,8 @@
 ``presentation-helper``
 =======================
 
+|pypi| |travis| |codecov|
+
 Creates web-based presentations based on simple YAML configurations
 and Jinja2_ templates.
 
@@ -10,3 +12,7 @@ presentation frameworks.
 
 .. _Jinja2: http://jinja.pocoo.org/
 .. _reveal.js: https://revealjs.com/
+
+.. |pypi| image:: https://img.shields.io/pypi/v/presentation-helper.svg?style=flat
+.. |travis| image:: https://img.shields.io/travis/fghaas/presentation-helper.svg?style=flat
+.. |codecov| image:: https://img.shields.io/codecov/c/github/fghaas/presentation-helper.svg?style=flat
