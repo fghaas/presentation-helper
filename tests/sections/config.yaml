@@ -1,0 +1,8 @@
+---
+sections:
+  - name: qrcode
+    type: qrcode
+    link: https://superfrobnicate.me
+  - name: intro
+  - name: main
+  - name: conclusion

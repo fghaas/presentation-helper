@@ -1,0 +1,27 @@
+---
+title: Superfrobnicate me
+summary: >-
+  A talk about superfrobnication.
+  This multi-line summary will be coalesced into a single line, no
+  matter how long it is.
+theme: white
+highlight: github
+controls:
+  enable: false
+  tutorial: true
+  layout: bottom-right
+  back_arrows: faded
+progress: false
+show_notes: true
+markdown:
+  path: markdown
+  separator: '^\n\n\n'
+  separator-vertical: '^\n\n'
+  separator-notes: '&lt;!-- Note: --&gt;'
+sections:
+  - name: qrcode
+    type: qrcode
+    link: https://superfrobnicate.me
+  - name: intro
+  - name: main
+  - name: conclusion

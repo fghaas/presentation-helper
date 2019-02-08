@@ -1,0 +1,13 @@
+.//xhtml:title,"Superfrobnicate me",
+.//xhtml:meta[@property='og:description'],"A talk about superfrobnication. This multi-line summary will be coalesced into a single line, no matter how long it is.",content
+.//xhtml:div[@class='slides']/xhtml:section[@id='qrcode']//xhtml:a,"https://superfrobnicate.me",
+.//xhtml:div[@class='slides']/xhtml:section[@id='qrcode']//xhtml:a,"https://superfrobnicate.me",href
+.//xhtml:div[@class='slides']/xhtml:section[@id='intro'],,
+.//xhtml:div[@class='slides']/xhtml:section[@id='main'],,
+.//xhtml:div[@class='slides']/xhtml:section[@id='conclusion'],,
+.//xhtml:div[@class='slides']/xhtml:section[@id='intro'],"markdown/intro.md",data-markdown
+.//xhtml:div[@class='slides']/xhtml:section[@id='main'],"markdown/main.md",data-markdown
+.//xhtml:div[@class='slides']/xhtml:section[@id='conclusion'],"markdown/conclusion.md",data-markdown
+.//xhtml:div[@class='slides']/xhtml:section[@id='intro'],"<!-- Note: -->",data-separator-notes
+.//xhtml:div[@class='slides']/xhtml:section[@id='main'],"<!-- Note: -->",data-separator-notes
+.//xhtml:div[@class='slides']/xhtml:section[@id='conclusion'],"<!-- Note: -->",data-separator-notes

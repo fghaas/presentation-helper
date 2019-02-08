@@ -1,0 +1,10 @@
+---
+markdown:
+  path: markdown
+  separator: '^\n\n\n'
+  separator-vertical: '^\n\n'
+  separator-notes: '&lt;!-- Note: --&gt;'
+sections:
+  - name: intro
+  - name: main
+  - name: conclusion

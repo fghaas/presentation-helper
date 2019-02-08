@@ -1,0 +1,6 @@
+.//xhtml:div[@class='slides']/xhtml:section[@id='intro'],"markdown/intro.md",data-markdown
+.//xhtml:div[@class='slides']/xhtml:section[@id='main'],"markdown/main.md",data-markdown
+.//xhtml:div[@class='slides']/xhtml:section[@id='conclusion'],"markdown/conclusion.md",data-markdown
+.//xhtml:div[@class='slides']/xhtml:section[@id='intro'],"<!-- Note: -->",data-separator-notes
+.//xhtml:div[@class='slides']/xhtml:section[@id='main'],"<!-- Note: -->",data-separator-notes
+.//xhtml:div[@class='slides']/xhtml:section[@id='conclusion'],"<!-- Note: -->",data-separator-notes
