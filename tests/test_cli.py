@@ -112,73 +112,108 @@ class IndexTestCase(TestCase):
 class TitleIndexTestCase(IndexTestCase):
 
     def test_index_renderer(self):
+        """Render a title through the renderer"""
         self.check_xpath()
 
     def test_cli_stream(self):
+        """Render a title through the CLI (to stdout)"""
         self.check_xpath_cliargs_stream()
 
     def test_cli_outputfile(self):
+        """Render a title through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
 
     def test_cli_templatefile_outputfile(self):
+        """
+        Render a title through the CLI (to a file, with a custom
+        template)
+        """
         self.check_xpath_cliargs_templatefile_outputfile()
 
 
 class SummaryIndexTestCase(IndexTestCase):
 
     def test_index_renderer(self):
+        """Render a summary through the renderer"""
         self.check_xpath()
 
     def test_cli_stream(self):
+        """Render a summary through the CLI (to stdout)"""
         self.check_xpath_cliargs_stream()
 
     def test_cli_outputfile(self):
+        """Render a summary through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
 
     def test_cli_templatefile_outputfile(self):
+        """
+        Render a summary through the CLI (to a file, with a custom
+        template)
+        """
         self.check_xpath_cliargs_templatefile_outputfile()
 
 
 class SectionsIndexTestCase(IndexTestCase):
 
     def test_index_renderer(self):
+        """Render sections through the renderer"""
         self.check_xpath()
 
     def test_cli_stream(self):
+        """Render sections through the CLI (to stdout)"""
         self.check_xpath_cliargs_stream()
 
     def test_cli_outputfile(self):
+        """Render sections through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
 
     def test_cli_templatefile_outputfile(self):
+        """
+        Render sections through the CLI (to a file, with a custom
+        template)
+        """
         self.check_xpath_cliargs_templatefile_outputfile()
 
 
 class MarkdownIndexTestCase(IndexTestCase):
 
     def test_index_renderer(self):
+        """Render Markdown sections through the renderer"""
         self.check_xpath()
 
     def test_cli_stream(self):
+        """Render Markdown sections through the CLI (to stdout)"""
         self.check_xpath_cliargs_stream()
 
     def test_cli_outputfile(self):
+        """Render Markdown sections through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
 
     def test_cli_templatefile_outputfile(self):
+        """
+        Render Markdown sections through the CLI (to a file, with a
+        custom template)
+        """
         self.check_xpath_cliargs_templatefile_outputfile()
 
 
 class EverythingIndexTestCase(IndexTestCase):
 
     def test_index(self):
+        """Render a full configuration through the renderer"""
         self.check_xpath()
 
     def test_cli_stream(self):
+        """Render a full configuration through the CLI (to stdout)"""
         self.check_xpath_cliargs_stream()
 
     def test_cli_outputfile(self):
+        """Render a full configuration through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
 
     def test_cli_templatefile_outputfile(self):
+        """
+        Render a full configuration through the CLI (to a file, with a
+        custom template)
+        """
         self.check_xpath_cliargs_templatefile_outputfile()
