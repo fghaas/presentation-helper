@@ -16,7 +16,7 @@ class CLI(object):
         self.parser.add_argument('-F',
                                  '--flavor',
                                  default='reveal',
-                                 choices=['reveal'],
+                                 choices=['reveal', 'generic'],
                                  help="Presentation flavor")
         self.parser.add_argument('-t',
                                  '--template',
@@ -49,9 +49,13 @@ class CLI(object):
         self.setup_renderer()
 
     def setup_renderer(self):
-        from .reveal import RevealIndexRenderer
-        self.renderer = RevealIndexRenderer(self.config,
-                                            self.template)
+        if self.flavor == 'generic':
+            from . import GenericIndexRenderer as Renderer
+        elif self.flavor == 'reveal':
+            from .reveal import RevealIndexRenderer as Renderer
+
+        self.renderer = Renderer(self.config,
+                                 self.template)
 
     def render(self, stream):
         self.renderer.render_template(stream)

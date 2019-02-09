@@ -46,6 +46,7 @@ class IndexTestCase(TestCase):
 
     def check_xpath(self):
         cli = CLI()
+        cli.flavor = 'reveal'
         cli.setup_config(self.config_path)
 
         with StringIO() as stream:
@@ -62,6 +63,7 @@ class IndexTestCase(TestCase):
             '-c', self.config_path
         ]
         cli = CLI()
+        cli.flavor = 'reveal'
         with StringIO() as stream:
             try:
                 sys.stdout = stream

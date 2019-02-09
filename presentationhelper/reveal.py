@@ -1,9 +1,9 @@
-from . import IndexRenderer
+from . import GenericIndexRenderer
 
 from jinja2 import Environment, PackageLoader
 
 
-class RevealIndexRenderer(IndexRenderer):
+class RevealIndexRenderer(GenericIndexRenderer):
 
     DEFAULTS = {
         'theme': 'white',

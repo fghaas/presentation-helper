@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 
-class IndexRenderer(object):
+class GenericIndexRenderer(object):
     """
     Renders a Jinja2 template, given a set of configuration values.
     """
