@@ -94,19 +94,21 @@ class IndexTestCase(TestCase):
 
     def check_xpath_cliargs_templatefile_outputfile(self):
         with tempfile.NamedTemporaryFile() as stream:
-            cliargs = [
-                '-c', self.config_path,
-                '-t', self.template_path,
-                '-o', stream.name
-            ]
-            cli = CLI()
-            cli.main(cliargs)
+            for flavor in ['reveal', 'generic']:
+                cliargs = [
+                    '-F', flavor,
+                    '-c', self.config_path,
+                    '-t', self.template_path,
+                    '-o', stream.name
+                ]
+                cli = CLI()
+                cli.main(cliargs)
 
-            stream.seek(0)
-            xhtml = ET.parse(stream)
+                stream.seek(0)
+                xhtml = ET.parse(stream)
 
-            with open(self.xpath_expr_path) as csvfile:
-                self.check_xpaths(xhtml, csvfile)
+                with open(self.xpath_expr_path) as csvfile:
+                    self.check_xpaths(xhtml, csvfile)
 
 
 class TitleIndexTestCase(IndexTestCase):

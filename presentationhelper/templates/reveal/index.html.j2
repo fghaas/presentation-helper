@@ -50,10 +50,17 @@ document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.l
         </section>
 {% else %}
         <section id="{{ section.id | default(section.name | lower) }}"
+{% if markdown is defined %}
                  data-markdown="{{ section.path | default(markdown.path | default('markdown') ~ '/' ~ section.name | lower ~ '.md')  }}"
                  data-separator="{{ section.separator | default(markdown.separator | default('^\n\n\n')) }}"
                  data-separator-vertical="{{ section['separator-vertical'] | default(markdown['separator-vertical'] | default('^\n\n')) }}"
                  data-separator-notes="{{ section['separator-notes'] | default(markdown['separator-notes'] | default('^Note:')) }}">
+{% else %}
+                 data-markdown="{{ section.path | default('markdown/' ~ section.name | lower ~ '.md')  }}"
+                 data-separator="{{ section.separator | default('^\n\n\n') }}"
+                 data-separator-vertical="{{ section['separator-vertical'] | default('^\n\n') }}"
+                 data-separator-notes="{{ section['separator-notes'] | default('^Note:') }}">
+{% endif %}
         </section>
 {% endif %}
 {% endfor %}
@@ -84,10 +91,12 @@ document.querySelectorAll('a[href]').forEach(function(a) {
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
 
+{% if controls is defined %}
     controls: {{ controls.enable | default(true)| lower }},
     controlsTutorial: {{ controls.tutorial | default(true) | lower }},
     controlsLayout: '{{ controls.layout | default("bottom-right") }}',
     controlsBackArrows: '{{ controls.back_arrows | default("faded") }}',
+{% endif %}
     progress: {{ progress | default(true) | lower }},
     history: true,
     center: true,
