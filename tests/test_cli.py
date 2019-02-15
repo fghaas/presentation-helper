@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import presentationhelper
 
-from presentationhelper.cli import CLI
+from presentationhelper.cli import CLI, main as climain, COMMAND as clicommand
 
 import xml.etree.ElementTree as ET
 
@@ -60,10 +60,11 @@ class IndexTestCase(TestCase):
 
     def check_xpath_cliargs_stream(self):
         cliargs = [
+            clicommand,
+            'reveal',
             '-c', self.config_path
         ]
         cli = CLI()
-        cli.flavor = 'reveal'
         with StringIO() as stream:
             try:
                 sys.stdout = stream
@@ -80,6 +81,8 @@ class IndexTestCase(TestCase):
     def check_xpath_cliargs_outputfile(self):
         with tempfile.NamedTemporaryFile() as stream:
             cliargs = [
+                clicommand,
+                'reveal',
                 '-c', self.config_path,
                 '-o', stream.name
             ]
@@ -96,13 +99,13 @@ class IndexTestCase(TestCase):
         with tempfile.NamedTemporaryFile() as stream:
             for flavor in ['reveal', 'generic']:
                 cliargs = [
-                    '-F', flavor,
+                    clicommand,
+                    flavor,
                     '-c', self.config_path,
                     '-t', self.template_path,
                     '-o', stream.name
                 ]
-                cli = CLI()
-                cli.main(cliargs)
+                climain(cliargs)
 
                 stream.seek(0)
                 xhtml = ET.parse(stream)

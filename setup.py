@@ -31,6 +31,11 @@ with open(README) as readme:
         packages=[
             'presentationhelper',
         ],
+        entry_points={
+            'console_scripts': [
+                'presentation-helper=presentationhelper.cli:main',
+            ],
+        },
         install_requires=[
             'Jinja2>=2.9',
             'PyYAML>=4.2b1'

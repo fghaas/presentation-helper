@@ -9,27 +9,53 @@ import sys
 from argparse import ArgumentParser
 
 
+COMMAND = "presentation-helper"
+
+
 class CLI(object):
 
     def __init__(self):
-        self.parser = ArgumentParser()
-        self.parser.add_argument('-F',
-                                 '--flavor',
-                                 default='reveal',
-                                 choices=['reveal', 'generic'],
-                                 help="Presentation flavor")
-        self.parser.add_argument('-t',
-                                 '--template',
-                                 metavar='TEMPLATE',
-                                 help="Jinja2 template file")
-        self.parser.add_argument('-c',
-                                 '--config',
-                                 metavar='CONFIG',
-                                 help="YAML configuration")
-        self.parser.add_argument('-o',
-                                 '--output',
-                                 metavar='OUTPUT',
-                                 help="Output file")
+        self.setup_argparse()
+
+    def setup_argparse(self):
+        parser = ArgumentParser()
+
+        subparsers = parser.add_subparsers(dest='flavor')
+
+        reveal_description = "renders a reveal.js presentation"
+        reveal_parser = subparsers.add_parser('reveal',
+                                              description=reveal_description)
+        reveal_parser.add_argument('-t',
+                                   '--template',
+                                   metavar='TEMPLATE',
+                                   help="Jinja2 template file")
+        reveal_parser.add_argument('-c',
+                                   '--config',
+                                   metavar='CONFIG',
+                                   help="YAML configuration")
+        reveal_parser.add_argument('-o',
+                                   '--output',
+                                   metavar='OUTPUT',
+                                   help="Output file")
+
+        generic_description = ('renders a presentation '
+                               'using a generic Jinja2 template')
+        generic_parser = subparsers.add_parser('generic',
+                                               description=generic_description)
+        generic_parser.add_argument('-t',
+                                    '--template',
+                                    metavar='TEMPLATE',
+                                    help="Jinja2 template file")
+        generic_parser.add_argument('-c',
+                                    '--config',
+                                    metavar='CONFIG',
+                                    help="YAML configuration")
+        generic_parser.add_argument('-o',
+                                    '--output',
+                                    metavar='OUTPUT',
+                                    help="Output file")
+        self.parser = parser
+
         self.flavor = None
         self.template = None
         self.config = None
@@ -60,8 +86,8 @@ class CLI(object):
     def render(self, stream):
         self.renderer.render_template(stream)
 
-    def main(self, argv=sys.argv[1:]):
-        args = self.parser.parse_args(argv)
+    def main(self, argv=sys.argv):
+        args = self.parser.parse_args(argv[1:])
 
         self.flavor = args.flavor
 
@@ -83,3 +109,7 @@ class CLI(object):
         self.render(stream)
 
         stream.flush()
+
+
+def main(argv=sys.argv):
+    CLI().main(argv)
