@@ -61,7 +61,8 @@ class IndexTestCase(TestCase):
                 self.check_xpaths(xhtml, csvfile)
 
     def check_xpath_cliargs_stream(self):
-        cliargs = "%s -F reveal -c %s" % (clicommand, self.config_path)
+        cliargs = "%s create -F reveal -c %s" % (clicommand,
+                                                 self.config_path)
         cli = CLI()
         with StringIO() as stream:
             try:
@@ -78,9 +79,10 @@ class IndexTestCase(TestCase):
 
     def check_xpath_cliargs_outputfile(self):
         with tempfile.NamedTemporaryFile() as stream:
-            cliargs = "%s -F reveal -c %s -o %s" % (clicommand,
-                                                    self.config_path,
-                                                    stream.name)
+            cliargs = ("%s create -F reveal "
+                       "-c %s -o %s") % (clicommand,
+                                         self.config_path,
+                                         stream.name)
             cli = CLI()
             cli.main(shlex.split(cliargs))
 
@@ -93,7 +95,7 @@ class IndexTestCase(TestCase):
     def check_xpath_cliargs_templatefile_outputfile(self):
         with tempfile.NamedTemporaryFile() as stream:
             for flavor in ['reveal', 'generic']:
-                cliargs = ("%s -F reveal -c %s "
+                cliargs = ("%s create -F reveal -c %s "
                            "-t %s -o %s") % (clicommand,
                                              self.config_path,
                                              self.template_path,

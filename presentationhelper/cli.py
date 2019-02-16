@@ -11,6 +11,20 @@ from argparse import ArgumentParser
 
 COMMAND = 'presentation-helper'
 
+OPTIONS = """
+create:
+  - 'flags': ['-F', '--flavor']
+    'choices': ['reveal', 'generic']
+    'help': 'Presentation flavor'
+    'default': 'generic'
+  - 'flags': ['-t', '--template']
+    'help': 'Jinja2 template file'
+  - 'flags': ['-c', '--config']
+    'help': 'YAML configuration file'
+  - 'flags': ['-o', '--output']
+    'help': 'Output file'
+"""
+
 
 class CLI(object):
 
@@ -18,27 +32,45 @@ class CLI(object):
         self.setup_argparse()
 
     def setup_argparse(self):
-        self.parser = ArgumentParser()
-        self.parser.add_argument('-F',
-                                 '--flavor',
-                                 default='reveal',
-                                 choices=['reveal', 'generic'],
-                                 help="Presentation flavor")
-        self.parser.add_argument('-t',
-                                 '--template',
-                                 metavar='TEMPLATE',
-                                 help="Jinja2 template file")
-        self.parser.add_argument('-c',
-                                 '--config',
-                                 metavar='CONFIG',
-                                 help="YAML configuration")
-        self.parser.add_argument('-o',
-                                 '--output',
-                                 metavar='OUTPUT',
-                                 help="Output file")
+        options = yaml.load(OPTIONS)
+
+        parser = ArgumentParser()
+        sub = parser.add_subparsers(dest='action')
+
+        for cmd, opts in options.items():
+            subparser = sub.add_parser(cmd)
+            for opt in opts:
+                args = opt.pop('flags')
+                kwargs = opt
+                subparser.add_argument(*args,
+                                       **kwargs)
+
+        self.parser = parser
         self.flavor = None
         self.template = None
         self.config = None
+
+    def create(self, args):
+        self.flavor = args.flavor
+
+        self.setup_renderer()
+
+        if args.template:
+            template_abspath = os.path.abspath(args.template)
+            self.setup_template(template_abspath)
+
+        if args.config:
+            config_abspath = os.path.abspath(args.config)
+            self.setup_config(config_abspath)
+
+        stream = sys.stdout
+        if args.output:
+            output_abspath = os.path.abspath(args.output)
+            stream = open(output_abspath, 'w')
+
+        self.render(stream)
+
+        stream.flush()
 
     def setup_template(self, path):
         template_dir = os.path.dirname(path)
@@ -69,26 +101,8 @@ class CLI(object):
     def main(self, argv=sys.argv):
         args = self.parser.parse_args(argv[1:])
 
-        self.flavor = args.flavor
-
-        self.setup_renderer()
-
-        if args.template:
-            template_abspath = os.path.abspath(args.template)
-            self.setup_template(template_abspath)
-
-        if args.config:
-            config_abspath = os.path.abspath(args.config)
-            self.setup_config(config_abspath)
-
-        stream = sys.stdout
-        if args.output:
-            output_abspath = os.path.abspath(args.output)
-            stream = open(output_abspath, 'w')
-
-        self.render(stream)
-
-        stream.flush()
+        if args.action:
+            getattr(self, args.action)(args)
 
 
 def main(argv=sys.argv):
