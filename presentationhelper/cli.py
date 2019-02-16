@@ -9,7 +9,7 @@ import sys
 from argparse import ArgumentParser
 
 
-COMMAND = "presentation-helper"
+COMMAND = 'presentation-helper'
 
 
 class CLI(object):
@@ -18,44 +18,24 @@ class CLI(object):
         self.setup_argparse()
 
     def setup_argparse(self):
-        parser = ArgumentParser()
-
-        subparsers = parser.add_subparsers(dest='flavor')
-
-        reveal_description = "renders a reveal.js presentation"
-        reveal_parser = subparsers.add_parser('reveal',
-                                              description=reveal_description)
-        reveal_parser.add_argument('-t',
-                                   '--template',
-                                   metavar='TEMPLATE',
-                                   help="Jinja2 template file")
-        reveal_parser.add_argument('-c',
-                                   '--config',
-                                   metavar='CONFIG',
-                                   help="YAML configuration")
-        reveal_parser.add_argument('-o',
-                                   '--output',
-                                   metavar='OUTPUT',
-                                   help="Output file")
-
-        generic_description = ('renders a presentation '
-                               'using a generic Jinja2 template')
-        generic_parser = subparsers.add_parser('generic',
-                                               description=generic_description)
-        generic_parser.add_argument('-t',
-                                    '--template',
-                                    metavar='TEMPLATE',
-                                    help="Jinja2 template file")
-        generic_parser.add_argument('-c',
-                                    '--config',
-                                    metavar='CONFIG',
-                                    help="YAML configuration")
-        generic_parser.add_argument('-o',
-                                    '--output',
-                                    metavar='OUTPUT',
-                                    help="Output file")
-        self.parser = parser
-
+        self.parser = ArgumentParser()
+        self.parser.add_argument('-F',
+                                 '--flavor',
+                                 default='reveal',
+                                 choices=['reveal', 'generic'],
+                                 help="Presentation flavor")
+        self.parser.add_argument('-t',
+                                 '--template',
+                                 metavar='TEMPLATE',
+                                 help="Jinja2 template file")
+        self.parser.add_argument('-c',
+                                 '--config',
+                                 metavar='CONFIG',
+                                 help="YAML configuration")
+        self.parser.add_argument('-o',
+                                 '--output',
+                                 metavar='OUTPUT',
+                                 help="Output file")
         self.flavor = None
         self.template = None
         self.config = None
