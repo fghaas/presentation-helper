@@ -16,6 +16,8 @@ import sys
 
 import tempfile
 
+import shlex
+
 NSMAP = {'xhtml': 'http://www.w3.org/1999/xhtml'}
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -59,16 +61,12 @@ class IndexTestCase(TestCase):
                 self.check_xpaths(xhtml, csvfile)
 
     def check_xpath_cliargs_stream(self):
-        cliargs = [
-            clicommand,
-            'reveal',
-            '-c', self.config_path
-        ]
+        cliargs = "%s reveal -c %s" % (clicommand, self.config_path)
         cli = CLI()
         with StringIO() as stream:
             try:
                 sys.stdout = stream
-                cli.main(cliargs)
+                cli.main(shlex.split(cliargs))
 
                 stream.seek(0)
                 xhtml = ET.parse(stream)
@@ -80,14 +78,11 @@ class IndexTestCase(TestCase):
 
     def check_xpath_cliargs_outputfile(self):
         with tempfile.NamedTemporaryFile() as stream:
-            cliargs = [
-                clicommand,
-                'reveal',
-                '-c', self.config_path,
-                '-o', stream.name
-            ]
+            cliargs = "%s reveal -c %s -o %s" % (clicommand,
+                                                 self.config_path,
+                                                 stream.name)
             cli = CLI()
-            cli.main(cliargs)
+            cli.main(shlex.split(cliargs))
 
             stream.seek(0)
             xhtml = ET.parse(stream)
@@ -98,14 +93,12 @@ class IndexTestCase(TestCase):
     def check_xpath_cliargs_templatefile_outputfile(self):
         with tempfile.NamedTemporaryFile() as stream:
             for flavor in ['reveal', 'generic']:
-                cliargs = [
-                    clicommand,
-                    flavor,
-                    '-c', self.config_path,
-                    '-t', self.template_path,
-                    '-o', stream.name
-                ]
-                climain(cliargs)
+                cliargs = ("%s reveal -c %s "
+                           "-t %s -o %s") % (clicommand,
+                                             self.config_path,
+                                             self.template_path,
+                                             stream.name)
+                climain(shlex.split(cliargs))
 
                 stream.seek(0)
                 xhtml = ET.parse(stream)
