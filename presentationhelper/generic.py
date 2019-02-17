@@ -54,10 +54,6 @@ class IndexRenderer(object):
         if output_path:
             self.output = open(output_path, 'w')
 
-    def _update_template(self, template):
-        if template:
-            self.template = template
-
     def render(self):
         self.output.write(self.template.render(self.config))
         self.output.flush()
