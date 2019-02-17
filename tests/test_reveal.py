@@ -119,7 +119,8 @@ class RevealIndexRendererTestCase(RevealTestCase):
 
     def check_xpath_outputfile(self):
         with tempfile.NamedTemporaryFile() as stream:
-            renderer = RevealIndexRenderer(stream.name)
+            renderer = RevealIndexRenderer(config_path=self.config_path,
+                                           output_path=stream.name)
             renderer.render()
 
             stream.seek(0)
@@ -154,7 +155,7 @@ class TitleRevealIndexRendererTestCase(RevealIndexRendererTestCase):
 
     def test_render_file(self):
         """Render a title through the renderer (to an output file)"""
-        self.check_xpath_stream()
+        self.check_xpath_outputfile()
 
     def test_render_stdout(self):
         """Render a title through the renderer (to stdout)"""
@@ -168,7 +169,7 @@ class SummaryRevealIndexRendererTestCase(RevealIndexRendererTestCase):
 
     def test_render_file(self):
         """Render a summary through the renderer (to an output file)"""
-        self.check_xpath_stream()
+        self.check_xpath_outputfile()
 
     def test_render_stdout(self):
         """Render a summary through the renderer (to stdout)"""
@@ -182,7 +183,7 @@ class SectionsRevealIndexRendererTestCase(RevealIndexRendererTestCase):
 
     def test_render_file(self):
         """Render sections through the renderer (to an output file)"""
-        self.check_xpath_stream()
+        self.check_xpath_outputfile()
 
     def test_render_stdout(self):
         """Render sections through the renderer (to stdout)"""
@@ -196,7 +197,7 @@ class MarkdownRevealIndexRendererTestCase(RevealIndexRendererTestCase):
 
     def test_render_file(self):
         """Render Markdown sections through the renderer (to an output file)"""
-        self.check_xpath_stream()
+        self.check_xpath_outputfile()
 
     def test_render_stdout(self):
         """Render Markdown sections through the renderer (to stdout)"""
@@ -211,7 +212,7 @@ class EverythingRevealIndexRendererTestCase(RevealIndexRendererTestCase):
     def test_render_file(self):
         """Render a full configuration through the renderer (to an output
         file)"""
-        self.check_xpath_stream()
+        self.check_xpath_outputfile()
 
     def test_render_stdout(self):
         """Render a full configuration through the renderer (to stdout)"""
