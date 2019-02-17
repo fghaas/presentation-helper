@@ -6,13 +6,9 @@ from presentationhelper.cli import CLI, main as climain, COMMAND as clicommand
 
 import xml.etree.ElementTree as ET
 
-from io import StringIO
-
 import csv
 
 import os
-
-import sys
 
 import tempfile
 
@@ -45,37 +41,6 @@ class IndexTestCase(TestCase):
                     self.assertEqual(element.attrib[attr], val)
                 else:
                     self.assertEqual(element.text, val)
-
-    def check_xpath(self):
-        cli = CLI()
-        cli.flavor = 'reveal'
-        cli.setup_config(self.config_path)
-
-        with StringIO() as stream:
-            cli.render(stream)
-
-            stream.seek(0)
-            xhtml = ET.parse(stream)
-
-            with open(self.xpath_expr_path) as csvfile:
-                self.check_xpaths(xhtml, csvfile)
-
-    def check_xpath_cliargs_stream(self):
-        cliargs = "%s create -F reveal -c %s" % (clicommand,
-                                                 self.config_path)
-        cli = CLI()
-        with StringIO() as stream:
-            try:
-                sys.stdout = stream
-                cli.main(shlex.split(cliargs))
-
-                stream.seek(0)
-                xhtml = ET.parse(stream)
-
-                with open(self.xpath_expr_path) as csvfile:
-                    self.check_xpaths(xhtml, csvfile)
-            finally:
-                sys.stdout = sys.__stdout__
 
     def check_xpath_cliargs_outputfile(self):
         with tempfile.NamedTemporaryFile() as stream:
@@ -111,14 +76,6 @@ class IndexTestCase(TestCase):
 
 class TitleIndexTestCase(IndexTestCase):
 
-    def test_index_renderer(self):
-        """Render a title through the renderer"""
-        self.check_xpath()
-
-    def test_cli_stream(self):
-        """Render a title through the CLI (to stdout)"""
-        self.check_xpath_cliargs_stream()
-
     def test_cli_outputfile(self):
         """Render a title through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
@@ -132,14 +89,6 @@ class TitleIndexTestCase(IndexTestCase):
 
 
 class SummaryIndexTestCase(IndexTestCase):
-
-    def test_index_renderer(self):
-        """Render a summary through the renderer"""
-        self.check_xpath()
-
-    def test_cli_stream(self):
-        """Render a summary through the CLI (to stdout)"""
-        self.check_xpath_cliargs_stream()
 
     def test_cli_outputfile(self):
         """Render a summary through the CLI (to a file)"""
@@ -155,14 +104,6 @@ class SummaryIndexTestCase(IndexTestCase):
 
 class SectionsIndexTestCase(IndexTestCase):
 
-    def test_index_renderer(self):
-        """Render sections through the renderer"""
-        self.check_xpath()
-
-    def test_cli_stream(self):
-        """Render sections through the CLI (to stdout)"""
-        self.check_xpath_cliargs_stream()
-
     def test_cli_outputfile(self):
         """Render sections through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
@@ -177,14 +118,6 @@ class SectionsIndexTestCase(IndexTestCase):
 
 class MarkdownIndexTestCase(IndexTestCase):
 
-    def test_index_renderer(self):
-        """Render Markdown sections through the renderer"""
-        self.check_xpath()
-
-    def test_cli_stream(self):
-        """Render Markdown sections through the CLI (to stdout)"""
-        self.check_xpath_cliargs_stream()
-
     def test_cli_outputfile(self):
         """Render Markdown sections through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
@@ -198,14 +131,6 @@ class MarkdownIndexTestCase(IndexTestCase):
 
 
 class EverythingIndexTestCase(IndexTestCase):
-
-    def test_index(self):
-        """Render a full configuration through the renderer"""
-        self.check_xpath()
-
-    def test_cli_stream(self):
-        """Render a full configuration through the CLI (to stdout)"""
-        self.check_xpath_cliargs_stream()
 
     def test_cli_outputfile(self):
         """Render a full configuration through the CLI (to a file)"""
