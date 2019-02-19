@@ -3,12 +3,14 @@ from __future__ import unicode_literals
 
 from .generic import PresentationCreator as GenericPresentationCreator
 
-from .generic import IndexRenderer as GenericIndexRenderer
+from .generic import TemplateRenderer as GenericTemplateRenderer
 
-from jinja2 import Environment, PackageLoader
+from jinja2 import FileSystemLoader, PackageLoader
+
+import os
 
 
-class RevealIndexRenderer(GenericIndexRenderer):
+class RevealTemplateRenderer(GenericTemplateRenderer):
 
     DEFAULTS = {
         'theme': 'white',
@@ -30,14 +32,24 @@ class RevealIndexRenderer(GenericIndexRenderer):
         'sections': [],
     }
 
-    def _setup_template(self, template_path=None):
-        env = Environment(loader=PackageLoader('presentationhelper',
-                                               'templates'),
-                          trim_blocks=True,
-                          lstrip_blocks=True)
-        self.template = env.get_template('reveal/index.html.j2')
+    def _setup_loaders(self):
+        super(RevealTemplateRenderer, self)._setup_loaders()
+        loader = None
+        if __file__ == os.path.abspath(__file__):
+            # We're on Python 3.4 and later. __file__ is an absolute
+            # path, we can use PackageLoader.
+            loader = PackageLoader('presentationhelper',
+                                   os.path.join('templates', 'reveal'))
+        else:
+            # __file__ is a relative path, PackageLoader won't
+            # work. Use a FileSystemLoader instead.
+            module_path = os.path.dirname(os.path.abspath(__file__))
+            loader = FileSystemLoader(os.path.join(module_path,
+                                                   'templates',
+                                                   'reveal'))
+        self.loaders.append(loader)
 
 
 class RevealPresentationCreator(GenericPresentationCreator):
 
-    INDEX_RENDERER_CLASS = RevealIndexRenderer
+    TEMPLATE_RENDERER_CLASS = RevealTemplateRenderer

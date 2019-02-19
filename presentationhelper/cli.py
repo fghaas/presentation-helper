@@ -14,15 +14,11 @@ COMMAND = 'presentation-helper'
 OPTIONS = """
 create:
   - 'flags': ['-F', '--flavor']
-    'choices': ['reveal', 'generic']
+    'choices': ['reveal']
     'help': 'Presentation flavor'
-    'default': 'generic'
-  - 'flags': ['-t', '--template']
-    'help': 'Jinja2 template file'
+    'default': 'reveal'
   - 'flags': ['-c', '--config']
     'help': 'YAML configuration file'
-  - 'flags': ['-o', '--output']
-    'help': 'Output file'
 """
 
 
@@ -59,9 +55,7 @@ class CLI(object):
         elif args.flavor == 'reveal':
             from .reveal import RevealPresentationCreator as Creator
 
-        creator = Creator(config_path=args.config,
-                          template_path=args.template,
-                          output_path=args.output)
+        creator = Creator(config_path=args.config)
 
         creator.create()
 

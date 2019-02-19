@@ -5,7 +5,7 @@ from unittest import TestCase
 
 import presentationhelper
 
-from presentationhelper.cli import CLI, main as climain, COMMAND as clicommand
+from presentationhelper.cli import CLI, COMMAND as clicommand
 
 import xml.etree.ElementTree as ET
 
@@ -16,6 +16,8 @@ import os
 import tempfile
 
 import shlex
+
+import shutil
 
 NSMAP = {'xhtml': 'http://www.w3.org/1999/xhtml'}
 
@@ -30,10 +32,8 @@ class CLITestCase(TestCase):
 
         self.config_path = os.path.join(DIR, name, 'config.yaml')
         self.xpath_expr_path = os.path.join(DIR, name, 'xpath.csv')
-        self.template_path = os.path.join(MODULE_DIR,
-                                          'templates',
-                                          'reveal',
-                                          'index.html.j2')
+
+        self.tmpdir = tempfile.mkdtemp()
 
     def check_xpaths(self, xhtml, csvfile):
         reader = csv.reader(csvfile)
@@ -46,35 +46,21 @@ class CLITestCase(TestCase):
                     self.assertEqual(element.text, val)
 
     def check_xpath_cliargs_outputfile(self):
-        with tempfile.NamedTemporaryFile() as stream:
-            cliargs = ("%s create -F reveal "
-                       "-c %s -o %s") % (clicommand,
-                                         self.config_path,
-                                         stream.name)
-            cli = CLI()
-            cli.main(shlex.split(cliargs))
+        os.chdir(self.tmpdir)
+        cliargs = ("%s create -F reveal "
+                   "-c %s") % (clicommand,
+                               self.config_path)
+        cli = CLI()
+        cli.main(shlex.split(cliargs))
 
-            stream.seek(0)
-            xhtml = ET.parse(stream)
-
+        index = os.path.join(self.tmpdir, 'index.html')
+        with open(index, 'r') as indexfile:
+            xhtml = ET.parse(indexfile)
             with open(self.xpath_expr_path) as csvfile:
                 self.check_xpaths(xhtml, csvfile)
 
-    def check_xpath_cliargs_templatefile_outputfile(self):
-        with tempfile.NamedTemporaryFile() as stream:
-            for flavor in ['reveal', 'generic']:
-                cliargs = ("%s create -F reveal -c %s "
-                           "-t %s -o %s") % (clicommand,
-                                             self.config_path,
-                                             self.template_path,
-                                             stream.name)
-                climain(shlex.split(cliargs))
-
-                stream.seek(0)
-                xhtml = ET.parse(stream)
-
-                with open(self.xpath_expr_path) as csvfile:
-                    self.check_xpaths(xhtml, csvfile)
+    def tearDown(self):
+        shutil.rmtree(self.tmpdir)
 
 
 class TitleCLITestCase(CLITestCase):
@@ -83,26 +69,12 @@ class TitleCLITestCase(CLITestCase):
         """Render a title through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
 
-    def test_cli_templatefile_outputfile(self):
-        """
-        Render a title through the CLI (to a file, with a custom
-        template)
-        """
-        self.check_xpath_cliargs_templatefile_outputfile()
-
 
 class SummaryCLITestCase(CLITestCase):
 
     def test_cli_outputfile(self):
         """Render a summary through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
-
-    def test_cli_templatefile_outputfile(self):
-        """
-        Render a summary through the CLI (to a file, with a custom
-        template)
-        """
-        self.check_xpath_cliargs_templatefile_outputfile()
 
 
 class SectionsCLITestCase(CLITestCase):
@@ -111,13 +83,6 @@ class SectionsCLITestCase(CLITestCase):
         """Render sections through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
 
-    def test_cli_templatefile_outputfile(self):
-        """
-        Render sections through the CLI (to a file, with a custom
-        template)
-        """
-        self.check_xpath_cliargs_templatefile_outputfile()
-
 
 class MarkdownCLITestCase(CLITestCase):
 
@@ -125,23 +90,9 @@ class MarkdownCLITestCase(CLITestCase):
         """Render Markdown sections through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
 
-    def test_cli_templatefile_outputfile(self):
-        """
-        Render Markdown sections through the CLI (to a file, with a
-        custom template)
-        """
-        self.check_xpath_cliargs_templatefile_outputfile()
-
 
 class EverythingCLITestCase(CLITestCase):
 
     def test_cli_outputfile(self):
         """Render a full configuration through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
-
-    def test_cli_templatefile_outputfile(self):
-        """
-        Render a full configuration through the CLI (to a file, with a
-        custom template)
-        """
-        self.check_xpath_cliargs_templatefile_outputfile()

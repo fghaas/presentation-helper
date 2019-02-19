@@ -10,23 +10,17 @@ import xml.etree.ElementTree as ET
 
 from unittest import TestCase
 
-try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
-
 import os
 
 import tempfile
 
-import sys
-
 import csv
+
+import shutil
 
 import presentationhelper
 
-from presentationhelper.reveal import (RevealPresentationCreator,
-                                       RevealIndexRenderer)
+from presentationhelper.reveal import (RevealPresentationCreator)
 
 
 NSMAP = {'xhtml': 'http://www.w3.org/1999/xhtml'}
@@ -61,162 +55,53 @@ class RevealPresentationCreatorCase(RevealTestCase):
         self.config_path = os.path.join(DIR, name, 'config.yaml')
         self.xpath_expr_path = os.path.join(DIR, name, 'xpath.csv')
 
+        self.tmpdir = tempfile.mkdtemp()
+
     def check_xpath_outputfile(self):
-        with tempfile.NamedTemporaryFile() as stream:
-            creator = RevealPresentationCreator(config_path=self.config_path,
-                                                output_path=stream.name)
-            creator.create()
-
-            stream.seek(0)
-            xhtml = ET.parse(stream)
-
-            with open(self.xpath_expr_path) as csvfile:
-                self.check_xpaths(xhtml, csvfile)
-
-            stream.close()
-
-    @patch('sys.stdout', new_callable=StringIO)
-    def check_xpath_stdout(self, mock_stdout):
+        os.chdir(self.tmpdir)
         creator = RevealPresentationCreator(config_path=self.config_path)
         creator.create()
 
-        mock_stdout.seek(0)
-        xhtml = ET.parse(mock_stdout)
+        index = os.path.join(self.tmpdir, 'index.html')
+        with open(index, 'r') as indexfile:
+            xhtml = ET.parse(indexfile)
+            with open(self.xpath_expr_path) as csvfile:
+                self.check_xpaths(xhtml, csvfile)
 
-        with open(self.xpath_expr_path) as csvfile:
-            self.check_xpaths(xhtml, csvfile)
+    def tearDown(self):
+        shutil.rmtree(self.tmpdir)
 
 
 class TitleRevealPresentationCreatorCase(RevealPresentationCreatorCase):
 
     def test_render_outputfile(self):
-        """Render a title through the renderer (to an output file)"""
+        """Render a title through the renderer"""
         self.check_xpath_outputfile()
 
-    def test_render_stdout(self):
-        """Render a title through the renderer (to stdout)"""
-        self.check_xpath_stdout()
 
+class SummaryRevealPresentationCreatorCase(RevealPresentationCreatorCase):
 
-class RevealIndexRendererTestCase(RevealTestCase):
-
-    def setUp(self):
-        name = self.__class__.__name__.replace('RevealIndexRendererTestCase',
-                                               '').lower()
-
-        self.config_path = os.path.join(DIR, name, 'config.yaml')
-        self.xpath_expr_path = os.path.join(DIR, name, 'xpath.csv')
-
-    def check_xpath_stream(self):
-        renderer = RevealIndexRenderer(config_path=self.config_path)
-
-        with StringIO() as stream:
-            renderer.output = stream
-            renderer.render()
-
-            stream.seek(0)
-            xhtml = ET.parse(stream)
-
-            with open(self.xpath_expr_path) as csvfile:
-                self.check_xpaths(xhtml, csvfile)
-
-    def check_xpath_outputfile(self):
-        with tempfile.NamedTemporaryFile() as stream:
-            renderer = RevealIndexRenderer(config_path=self.config_path,
-                                           output_path=stream.name)
-            renderer.render()
-
-            stream.seek(0)
-            xhtml = ET.parse(stream)
-
-            with open(self.xpath_expr_path) as csvfile:
-                self.check_xpaths(xhtml, csvfile)
-
-    @patch('sys.stdout', new_callable=StringIO)
-    def check_xpath_stdout(self, mock_stdout):
-        renderer = RevealIndexRenderer(config_path=self.config_path)
-
-        renderer.render()
-
-        mock_stdout.seek(0)
-        xhtml = ET.parse(mock_stdout)
-
-        with open(self.xpath_expr_path) as csvfile:
-            self.check_xpaths(xhtml, csvfile)
-
-    def test_init_output_stdout(self):
-        """Does a RevealIndexRenderer use stdout as its default output?"""
-        renderer = RevealIndexRenderer()
-        self.assertIs(renderer.output, sys.stdout)
-
-
-class TitleRevealIndexRendererTestCase(RevealIndexRendererTestCase):
-
-    def test_render_stream(self):
-        """Render a title through the renderer (to a stream)"""
-        self.check_xpath_stream()
-
-    def test_render_file(self):
-        """Render a title through the renderer (to an output file)"""
+    def test_render_outputfile(self):
+        """Render a summary through the renderer"""
         self.check_xpath_outputfile()
 
-    def test_render_stdout(self):
-        """Render a title through the renderer (to stdout)"""
-        self.check_xpath_stdout()
 
+class SectionsRevealPresentationCreatorCase(RevealPresentationCreatorCase):
 
-class SummaryRevealIndexRendererTestCase(RevealIndexRendererTestCase):
-    def test_render_stream(self):
-        """Render a summary through the renderer (to a stream)"""
-        self.check_xpath_stream()
-
-    def test_render_file(self):
-        """Render a summary through the renderer (to an output file)"""
+    def test_render_outputfile(self):
+        """Render a title through the renderer"""
         self.check_xpath_outputfile()
 
-    def test_render_stdout(self):
-        """Render a summary through the renderer (to stdout)"""
-        self.check_xpath_stdout()
 
+class MarkdownRevealPresentationCreatorCase(RevealPresentationCreatorCase):
 
-class SectionsRevealIndexRendererTestCase(RevealIndexRendererTestCase):
-    def test_render_stream(self):
-        """Render sections through the renderer (to a stream)"""
-        self.check_xpath_stream()
-
-    def test_render_file(self):
-        """Render sections through the renderer (to an output file)"""
+    def test_render_outputfile(self):
+        """Render a title through the renderer"""
         self.check_xpath_outputfile()
 
-    def test_render_stdout(self):
-        """Render sections through the renderer (to stdout)"""
-        self.check_xpath_stdout()
 
+class EverythingRevealPresentationCreatorCase(RevealPresentationCreatorCase):
 
-class MarkdownRevealIndexRendererTestCase(RevealIndexRendererTestCase):
-    def test_render_stream(self):
-        """Render Markdown sections through the renderer (to a stream)"""
-        self.check_xpath_stream()
-
-    def test_render_file(self):
-        """Render Markdown sections through the renderer (to an output file)"""
+    def test_render_outputfile(self):
+        """Render a title through the renderer"""
         self.check_xpath_outputfile()
-
-    def test_render_stdout(self):
-        """Render Markdown sections through the renderer (to stdout)"""
-        self.check_xpath_stdout()
-
-
-class EverythingRevealIndexRendererTestCase(RevealIndexRendererTestCase):
-    def test_render_stream(self):
-        """Render a full configuration through the renderer (to a stream)"""
-        self.check_xpath_stream()
-
-    def test_render_file(self):
-        """Render a full configuration through the renderer (to an output
-        file)"""
-        self.check_xpath_outputfile()
-
-    def test_render_stdout(self):
-        """Render a full configuration through the renderer (to stdout)"""
-        self.check_xpath_stdout()
