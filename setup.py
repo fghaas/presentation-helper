@@ -31,6 +31,7 @@ with open(README) as readme:
         packages=[
             'presentationhelper',
         ],
+        include_package_data=True,
         entry_points={
             'console_scripts': [
                 'presentation-helper=presentationhelper.cli:main',
