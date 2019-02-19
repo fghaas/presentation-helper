@@ -23,10 +23,10 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 MODULE_DIR = os.path.dirname(presentationhelper.__file__)
 
 
-class IndexTestCase(TestCase):
+class CLITestCase(TestCase):
 
     def setUp(self):
-        name = self.__class__.__name__.replace('IndexTestCase', '').lower()
+        name = self.__class__.__name__.replace('CLITestCase', '').lower()
 
         self.config_path = os.path.join(DIR, name, 'config.yaml')
         self.xpath_expr_path = os.path.join(DIR, name, 'xpath.csv')
@@ -77,7 +77,7 @@ class IndexTestCase(TestCase):
                     self.check_xpaths(xhtml, csvfile)
 
 
-class TitleIndexTestCase(IndexTestCase):
+class TitleCLITestCase(CLITestCase):
 
     def test_cli_outputfile(self):
         """Render a title through the CLI (to a file)"""
@@ -91,7 +91,7 @@ class TitleIndexTestCase(IndexTestCase):
         self.check_xpath_cliargs_templatefile_outputfile()
 
 
-class SummaryIndexTestCase(IndexTestCase):
+class SummaryCLITestCase(CLITestCase):
 
     def test_cli_outputfile(self):
         """Render a summary through the CLI (to a file)"""
@@ -105,7 +105,7 @@ class SummaryIndexTestCase(IndexTestCase):
         self.check_xpath_cliargs_templatefile_outputfile()
 
 
-class SectionsIndexTestCase(IndexTestCase):
+class SectionsCLITestCase(CLITestCase):
 
     def test_cli_outputfile(self):
         """Render sections through the CLI (to a file)"""
@@ -119,7 +119,7 @@ class SectionsIndexTestCase(IndexTestCase):
         self.check_xpath_cliargs_templatefile_outputfile()
 
 
-class MarkdownIndexTestCase(IndexTestCase):
+class MarkdownCLITestCase(CLITestCase):
 
     def test_cli_outputfile(self):
         """Render Markdown sections through the CLI (to a file)"""
@@ -133,7 +133,7 @@ class MarkdownIndexTestCase(IndexTestCase):
         self.check_xpath_cliargs_templatefile_outputfile()
 
 
-class EverythingIndexTestCase(IndexTestCase):
+class EverythingCLITestCase(CLITestCase):
 
     def test_cli_outputfile(self):
         """Render a full configuration through the CLI (to a file)"""
