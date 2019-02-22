@@ -50,9 +50,7 @@ class CLI(object):
         self.parser = parser
 
     def create(self, args):
-        if args.flavor == 'generic':
-            from .generic import PresentationCreator as Creator
-        elif args.flavor == 'reveal':
+        if args.flavor == 'reveal':
             from .reveal import RevealPresentationCreator as Creator
 
         creator = Creator(config_path=args.config)
