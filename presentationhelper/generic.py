@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from jinja2 import Environment, ChoiceLoader, DictLoader, FileSystemLoader
+from jinja2 import Environment, ChoiceLoader, FileSystemLoader
 
 import os
 
@@ -63,10 +63,6 @@ class TemplateRenderer(object):
             # Template overrides does not contain a directory
             pass
         loaders.append(fs_loader)
-
-        if templates:
-            dict_loader = DictLoader(templates)
-            loaders.append(dict_loader)
 
         self.loaders = loaders
 
