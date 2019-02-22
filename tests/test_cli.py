@@ -5,7 +5,7 @@ from unittest import TestCase
 
 import presentationhelper
 
-from presentationhelper.cli import CLI, COMMAND as clicommand
+from presentationhelper.cli import main as climain, COMMAND as clicommand
 
 import xml.etree.ElementTree as ET
 
@@ -50,8 +50,7 @@ class CLITestCase(TestCase):
         cliargs = ("%s create -F reveal "
                    "-c %s") % (clicommand,
                                self.config_path)
-        cli = CLI()
-        cli.main(shlex.split(cliargs))
+        climain(shlex.split(cliargs))
 
         index = os.path.join(self.tmpdir, 'index.html')
         with open(index, 'r') as indexfile:
