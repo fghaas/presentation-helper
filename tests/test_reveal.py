@@ -31,10 +31,6 @@ MODULE_DIR = os.path.dirname(presentationhelper.__file__)
 
 class RevealTestCase(TestCase):
 
-    def setUp(self):
-        self.config_path = None
-        self.xpath_expr_path = None
-
     def check_xpaths(self, xhtml, csvfile):
         reader = csv.reader(csvfile)
         for (exp, val, attr) in reader:
