@@ -37,6 +37,9 @@ class TemplateRenderer(object):
         self.config = self.DEFAULTS.copy()
 
     def _setup_config(self, config_path=None):
+        # Remember the path of the config file, so we can calculate
+        # template paths relative to it
+        self.config_path = config_path
         if config_path:
             with open(config_path, 'r') as config_file:
                 self.config.update(yaml.safe_load(config_file))
@@ -50,13 +53,15 @@ class TemplateRenderer(object):
             # Config does not contain any template overrides
             pass
 
-        directory = os.getcwd()
+        fs_loader = FileSystemLoader('.')
         try:
             directory = templates.pop('directory')
+            path = os.path.join(os.path.dirname(self.config_path),
+                                directory)
+            fs_loader = FileSystemLoader(path)
         except KeyError:
             # Template overrides does not contain a directory
             pass
-        fs_loader = FileSystemLoader(directory)
         loaders.append(fs_loader)
 
         if templates:
