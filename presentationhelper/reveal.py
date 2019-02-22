@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from .generic import PresentationCreator as GenericPresentationCreator
 
 from .generic import TemplateRenderer as GenericTemplateRenderer

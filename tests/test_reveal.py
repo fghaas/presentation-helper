@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-try:
-    from io import StringIO
-except ImportError:
-    from cStringIO import StringIO
-
 import xml.etree.ElementTree as ET
 
 from unittest import TestCase
