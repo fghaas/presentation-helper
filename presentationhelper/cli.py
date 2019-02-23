@@ -4,6 +4,8 @@ import yaml
 
 import sys
 
+import logging
+
 from argparse import ArgumentParser
 
 
@@ -88,6 +90,14 @@ class CLI(object):
 
     def main(self, argv=sys.argv):
         args = self.parser.parse_args(argv[1:])
+
+        # Python log levels go from 10 (DEBUG) to 50 (CRITICAL),
+        # our verbosity argument goes from -1 (-q) to 2 (-vv).
+        # We never want to suppress error and critical messages,
+        # and default to 30 (WARNING). Hence:
+        verbosity = min(args.verbosity, 2)
+        loglevel = 30 - (verbosity * 10)
+        logging.basicConfig(level=loglevel)
 
         if args.action:
             getattr(self, args.action)(args)
