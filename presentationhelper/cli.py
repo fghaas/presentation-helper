@@ -10,14 +10,53 @@ from argparse import ArgumentParser
 COMMAND = 'presentation-helper'
 
 OPTIONS = """
-create:
-  - 'flags': ['-F', '--flavor']
-    'choices': ['reveal']
-    'help': 'Presentation flavor'
-    'default': 'reveal'
-  - 'flags': ['-c', '--config']
-    'help': 'YAML configuration file'
+options:
+  - 'flags': ['-v', '--verbose']
+    action: count
+    help: 'verbose output (repeat for more verbosity)'
+    dest: verbosity
+    default: 0
+  - 'flags': ['-q', '--quiet']
+    action: store_const
+    help: 'quiet output (show errors only)'
+    const: -1
+    dest: verbosity
+subcommands:
+- create:
+    options:
+      - 'flags': ['-F', '--flavor']
+        'choices': ['reveal']
+        'help': 'Presentation flavor'
+        'default': 'reveal'
+        dest: flavor
+      - 'flags': ['-c', '--config']
+        'help': 'YAML configuration file'
+        dest: config
 """
+
+
+def walk_opts(dictionary, parser):
+    """Walk a dictionary and populate an ArgumentParser."""
+
+    if 'options' in dictionary:
+        for opt in dictionary['options']:
+            args = ()
+            try:
+                args = opt.pop('flags')
+            except KeyError:
+                # item has no 'flags' key, represents a positional
+                # argument
+                pass
+            kwargs = opt
+            parser.add_argument(*args,
+                                **kwargs)
+
+    if 'subcommands' in dictionary:
+        subs = parser.add_subparsers(dest='action')
+        for subcommand in dictionary['subcommands']:
+            for cmd, opts in subcommand.items():
+                sub = subs.add_parser(cmd)
+                walk_opts(opts, sub)
 
 
 class CLI(object):
@@ -35,15 +74,7 @@ class CLI(object):
         options = yaml.safe_load(OPTIONS)
 
         parser = ArgumentParser(description=self.__doc__)
-        sub = parser.add_subparsers(dest='action')
-
-        for cmd, opts in options.items():
-            subparser = sub.add_parser(cmd)
-            for opt in opts:
-                args = opt.pop('flags')
-                kwargs = opt
-                subparser.add_argument(*args,
-                                       **kwargs)
+        walk_opts(options, parser)
 
         self.parser = parser
 
