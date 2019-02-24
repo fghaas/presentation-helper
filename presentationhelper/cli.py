@@ -105,7 +105,8 @@ class CLI(object):
         # and default to 30 (WARNING). Hence:
         verbosity = min(args.verbosity, 2)
         loglevel = 30 - (verbosity * 10)
-        logging.basicConfig(level=loglevel)
+        logging.basicConfig(level=loglevel,
+                            format='%(message)s')
 
         if args.action:
             getattr(self, args.action)(args)
@@ -116,6 +117,7 @@ def main(argv=sys.argv):
         CLI().main(argv)
     except Exception as e:
         logging.error(str(e))
+        logging.debug('', exc_info=True)
         try:
             sys.exit(e.errno)
         except AttributeError:

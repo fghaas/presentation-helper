@@ -45,7 +45,7 @@ class CLITestCase(TestCase):
 
     def check_xpath_cliargs_outputfile(self):
         os.chdir(self.tmpdir)
-        cliargs = ("%s create -F reveal "
+        cliargs = ("%s -vv create -F reveal "
                    "-c %s") % (clicommand,
                                self.config_path)
         climain(shlex.split(cliargs))

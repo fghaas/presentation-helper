@@ -7,6 +7,10 @@ import yaml
 
 import re
 
+import logging
+
+from pprint import pformat
+
 
 class TemplateRendererException(Exception):
     pass
@@ -85,6 +89,11 @@ class TemplateRenderer(object):
         for template in self.templates:
             dest = re.sub('\.j2$', '', template.name)  # noqa: W605
             outfile = os.path.join(os.getcwd(), dest)
+            logging.info("Writing %s" % outfile)
+            logging.debug("Writing %s from %s using %s" %
+                          (outfile,
+                           template.name,
+                           pformat(self.config)))
             with open(outfile, 'w') as out:
                 template.stream(self.config).dump(out)
 
