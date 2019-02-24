@@ -93,3 +93,16 @@ class EverythingCLITestCase(CLITestCase):
     def test_cli_outputfile(self):
         """Render a full configuration through the CLI (to a file)"""
         self.check_xpath_cliargs_outputfile()
+
+
+class InvalidCLICallTestCase(TestCase):
+
+    def test_invalid_config_file(self):
+        cliargs = ("%s create "
+                   "-c nonexistent.file") % clicommand
+
+        # Using a non-existent config file should set the exit code to
+        # ENOENT (2).
+        with self.assertRaises(SystemExit) as se:
+            climain(shlex.split(cliargs))
+        self.assertEqual(se.exception.code, 2)
