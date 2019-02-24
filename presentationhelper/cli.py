@@ -112,4 +112,11 @@ class CLI(object):
 
 
 def main(argv=sys.argv):
-    CLI().main(argv)
+    try:
+        CLI().main(argv)
+    except Exception as e:
+        logging.error(str(e))
+        try:
+            sys.exit(e.errno)
+        except AttributeError:
+            sys.exit(1)
