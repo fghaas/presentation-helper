@@ -3,11 +3,41 @@ import logging
 import os
 import re
 
+from io import StringIO
 from pprint import pformat
 
 import yaml
 
 from jinja2 import Environment, ChoiceLoader, FileSystemLoader
+
+
+class Config(object):
+    """Convenience object that represents a configuration."""
+
+    DEFAULTS = {}
+
+    def __init__(self):
+        self.__dict__ = self.DEFAULTS.copy()
+
+    def __str__(self):
+        with StringIO() as stream:
+            self.dump(stream)
+            ret = stream.getvalue()
+        return ret
+
+    def update(self, data):
+        self.__dict__.update(data)
+
+    def dump(self, stream):
+        yaml.safe_dump(self.__dict__,
+                       stream,
+                       default_flow_style=False)
+
+    def load(self, stream):
+        self.update(yaml.safe_load(stream))
+
+    def to_dict(self):
+        return self.__dict__
 
 
 class TemplateRendererException(Exception):
@@ -20,8 +50,6 @@ class TemplateRenderer(object):
     of configuration values.
 
     """
-
-    DEFAULTS = {}
 
     def __init__(self,
                  config_path=None):
@@ -36,7 +64,7 @@ class TemplateRenderer(object):
         self._load_templates()
 
     def _init_config(self):
-        self.config = self.DEFAULTS.copy()
+        self.config = Config()
 
     def _setup_config(self, config_path=None):
         # Remember the path of the config file, so we can calculate
@@ -44,14 +72,14 @@ class TemplateRenderer(object):
         self.config_path = config_path
         if config_path:
             with open(config_path, 'r') as config_file:
-                self.config.update(yaml.safe_load(config_file))
+                self.config.load(config_file)
 
     def _setup_loaders(self):
         loaders = []
         templates = {}
         try:
-            templates = self.config['templates'].copy()
-        except KeyError:
+            templates = self.config.templates.copy()
+        except AttributeError:
             # Config does not contain any template overrides
             pass
 
@@ -91,9 +119,9 @@ class TemplateRenderer(object):
             logging.debug("Writing %s from %s using %s" %
                           (outfile,
                            template.name,
-                           pformat(self.config)))
+                           pformat(self.config.to_dict())))
             with open(outfile, 'w') as out:
-                template.stream(self.config).dump(out)
+                template.stream(self.config.to_dict()).dump(out)
 
 
 class PresentationCreator(object):

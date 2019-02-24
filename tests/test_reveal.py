@@ -1,20 +1,79 @@
 # -*- coding: utf-8 -*-
 import csv
+from io import StringIO
 import os
 import shutil
 import tempfile
+from tempfile import NamedTemporaryFile
 import xml.etree.ElementTree as ET
+import yaml
 
 from unittest import TestCase
 
 import presentationhelper
 from presentationhelper.reveal import RevealPresentationCreator
+from presentationhelper.reveal import RevealConfig
 
 
 NSMAP = {'xhtml': 'http://www.w3.org/1999/xhtml'}
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 MODULE_DIR = os.path.dirname(presentationhelper.__file__)
+
+
+class ConfigTestCase(TestCase):
+
+    def test_str(self):
+        config = RevealConfig()
+        config_str = str(config)
+        stream = StringIO(config_str)
+        d = yaml.safe_load(stream)
+        self.assertIn('theme', d.keys())
+
+    def test_default_config(self):
+        config = RevealConfig()
+        self.assertEqual(config.to_dict(), {
+            'theme': 'white',
+            'highlight': 'github',
+            'controls': {
+                'enable': True,
+                'tutorial': True,
+                'layout': 'bottom-right',
+                'back_arrows': 'faded',
+            },
+            'progress': True,
+            'show_notes': False,
+            'markdown': {
+                'path': 'markdown',
+                'separator': '^\\n\\n\\n',
+                'separator-vertical': '^\\n\\n',
+                'separator-notes': '^Note:',
+            },
+            'sections': [],
+        })
+
+    def test_default_config_writeback(self):
+        config = RevealConfig()
+        with NamedTemporaryFile(mode='w') as writer:
+            config.dump(writer)
+            with open(writer.name, 'r') as reader:
+                expected = """controls:
+  back_arrows: faded
+  enable: true
+  layout: bottom-right
+  tutorial: true
+highlight: github
+markdown:
+  path: markdown
+  separator: ^\\n\\n\\n
+  separator-notes: '^Note:'
+  separator-vertical: ^\\n\\n
+progress: true
+sections: []
+show_notes: false
+theme: white
+"""
+                self.assertEqual(reader.read(), expected)
 
 
 class RevealTestCase(TestCase):

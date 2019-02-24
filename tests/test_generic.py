@@ -1,15 +1,30 @@
 # -*- coding: utf-8 -*-
 import os
 import shutil
-from tempfile import TemporaryDirectory
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 
 from unittest import TestCase
 
-from presentationhelper.generic import (PresentationCreator,
+from presentationhelper.generic import (Config,
+                                        PresentationCreator,
                                         TemplateRendererException)
 
 
 DIR = os.path.dirname(os.path.realpath(__file__))
+
+
+class ConfigTestCase(TestCase):
+
+    def test_default_config(self):
+        config = Config()
+        self.assertEqual(config.to_dict(), {})
+
+    def test_default_config_writeback(self):
+        config = Config()
+        with NamedTemporaryFile(mode='w') as writer:
+            config.dump(writer)
+            with open(writer.name, 'r') as reader:
+                self.assertEqual(reader.read(), '{}\n')
 
 
 class PresentationCreatorTestCase(TestCase):

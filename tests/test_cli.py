@@ -4,7 +4,9 @@ import os
 import shlex
 import shutil
 import tempfile
+from tempfile import NamedTemporaryFile
 import xml.etree.ElementTree as ET
+import yaml
 
 from unittest import TestCase
 
@@ -101,3 +103,17 @@ class InvalidCLICallTestCase(TestCase):
         with self.assertRaises(SystemExit) as se:
             climain(shlex.split(cliargs))
         self.assertEqual(se.exception.code, 2)
+
+
+class DefaultConfigTestCase(TestCase):
+
+    def test_default_config(self):
+        """Does the default-config subcommand create a file with loadable
+        YAML?"""
+        with NamedTemporaryFile() as output:
+            cliargs = ("%s -F reveal default-config "
+                       "-o %s") % (clicommand, output.name)
+            climain(shlex.split(cliargs))
+            with open(output.name, 'r') as readback:
+                d = yaml.safe_load(readback)
+                self.assertIn('theme', d.keys())

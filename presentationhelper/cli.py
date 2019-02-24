@@ -40,6 +40,11 @@ subcommands:
       - 'flags': ['-c', '--config']
         'help': 'YAML configuration file'
         dest: config
+- 'default-config':
+    options:
+      - 'flags': ['-o', '--output']
+        'help': 'output file'
+        dest: output
 """ % VERSION
 
 
@@ -94,6 +99,21 @@ class CLI(object):
 
         creator.create()
 
+    def default_config(self, args):
+        if args.flavor == 'reveal':
+            from .reveal import RevealConfig as Config
+
+        config = Config()
+
+        output = sys.stdout
+
+        if args.output:
+            output = open(args.output, 'w')
+        config.dump(output)
+        output.flush()
+        if output is not sys.stdout:
+            output.close()
+
     def main(self, argv=sys.argv):
         args = self.parser.parse_args(argv[1:])
 
@@ -107,7 +127,7 @@ class CLI(object):
                             format='%(message)s')
 
         if args.action:
-            getattr(self, args.action)(args)
+            getattr(self, args.action.replace('-', '_'))(args)
 
 
 def main(argv=sys.argv):

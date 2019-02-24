@@ -3,11 +3,13 @@ import os
 
 from jinja2 import PackageLoader
 
+from .generic import Config as GenericConfig
 from .generic import PresentationCreator as GenericPresentationCreator
 from .generic import TemplateRenderer as GenericTemplateRenderer
 
 
-class RevealTemplateRenderer(GenericTemplateRenderer):
+class RevealConfig(GenericConfig):
+    """Convenience object that represents a configuration."""
 
     DEFAULTS = {
         'theme': 'white',
@@ -28,6 +30,12 @@ class RevealTemplateRenderer(GenericTemplateRenderer):
         },
         'sections': [],
     }
+
+
+class RevealTemplateRenderer(GenericTemplateRenderer):
+
+    def _init_config(self):
+        self.config = RevealConfig()
 
     def _setup_loaders(self):
         super(RevealTemplateRenderer, self)._setup_loaders()
