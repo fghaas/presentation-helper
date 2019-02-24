@@ -1,21 +1,16 @@
 # -*- coding: utf-8 -*-
+import csv
+import os
+import shlex
+import shutil
+import tempfile
+import xml.etree.ElementTree as ET
+
 from unittest import TestCase
 
 import presentationhelper
-
 from presentationhelper.cli import main as climain, COMMAND as clicommand
 
-import xml.etree.ElementTree as ET
-
-import csv
-
-import os
-
-import tempfile
-
-import shlex
-
-import shutil
 
 NSMAP = {'xhtml': 'http://www.w3.org/1999/xhtml'}
 

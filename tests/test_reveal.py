@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
+import csv
+import os
+import shutil
+import tempfile
 import xml.etree.ElementTree as ET
 
 from unittest import TestCase
 
-import os
-
-import tempfile
-
-import csv
-
-import shutil
-
 import presentationhelper
-
-from presentationhelper.reveal import (RevealPresentationCreator)
+from presentationhelper.reveal import RevealPresentationCreator
 
 
 NSMAP = {'xhtml': 'http://www.w3.org/1999/xhtml'}

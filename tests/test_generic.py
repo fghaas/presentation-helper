@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
-
-from tempfile import TemporaryDirectory
 import os
 import shutil
+from tempfile import TemporaryDirectory
+
+from unittest import TestCase
 
 from presentationhelper.generic import (PresentationCreator,
                                         TemplateRendererException)
+
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 

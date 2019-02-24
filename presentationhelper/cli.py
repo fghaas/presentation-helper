@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import logging
+import sys
+from argparse import ArgumentParser
+
 import yaml
 
-import sys
-
-import logging
-
 from . import __version__
-
-from argparse import ArgumentParser
 
 
 COMMAND = 'presentation-helper'

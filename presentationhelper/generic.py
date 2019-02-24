@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
-from jinja2 import Environment, ChoiceLoader, FileSystemLoader
-
+import logging
 import os
+import re
+
+from pprint import pformat
 
 import yaml
 
-import re
-
-import logging
-
-from pprint import pformat
+from jinja2 import Environment, ChoiceLoader, FileSystemLoader
 
 
 class TemplateRendererException(Exception):

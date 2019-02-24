@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from .generic import PresentationCreator as GenericPresentationCreator
-
-from .generic import TemplateRenderer as GenericTemplateRenderer
+import os
 
 from jinja2 import PackageLoader
 
-import os
+from .generic import PresentationCreator as GenericPresentationCreator
+from .generic import TemplateRenderer as GenericTemplateRenderer
 
 
 class RevealTemplateRenderer(GenericTemplateRenderer):
