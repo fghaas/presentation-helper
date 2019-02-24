@@ -29,14 +29,14 @@ options:
     help: 'quiet output (show errors only)'
     const: -1
     dest: verbosity
+  - 'flags': ['-F', '--flavor']
+    'choices': ['reveal']
+    'help': 'Presentation flavor'
+    'default': 'reveal'
+    dest: flavor
 subcommands:
 - create:
     options:
-      - 'flags': ['-F', '--flavor']
-        'choices': ['reveal']
-        'help': 'Presentation flavor'
-        'default': 'reveal'
-        dest: flavor
       - 'flags': ['-c', '--config']
         'help': 'YAML configuration file'
         dest: config
