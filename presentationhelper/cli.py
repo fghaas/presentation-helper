@@ -6,13 +6,21 @@ import sys
 
 import logging
 
+from . import __version__
+
 from argparse import ArgumentParser
 
 
 COMMAND = 'presentation-helper'
 
+VERSION = '%(prog)s ' + __version__
+
 OPTIONS = """
 options:
+  - 'flags': ['-V', '--version']
+    action: version
+    help: 'show version'
+    version: '%s'
   - 'flags': ['-v', '--verbose']
     action: count
     help: 'verbose output (repeat for more verbosity)'
@@ -34,7 +42,7 @@ subcommands:
       - 'flags': ['-c', '--config']
         'help': 'YAML configuration file'
         dest: config
-"""
+""" % VERSION
 
 
 def walk_opts(dictionary, parser):

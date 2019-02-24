@@ -7,10 +7,11 @@ from setuptools import setup
 DIR = os.path.dirname(os.path.realpath(__file__))
 README = os.path.join(DIR, 'README.rst')
 
+
 with open(README) as readme:
     setup(
         name='presentation-helper',
-        version='0.0.1',
+        use_scm_version=True,
         description='presentation-helper: '
                     'Creates a presentation skeleton '
                     'from a simple YAML configuration',
@@ -39,5 +40,6 @@ with open(README) as readme:
         install_requires=[
             'Jinja2>=2.9',
             'PyYAML>=4.2b1'
-        ]
+        ],
+        setup_requires=['setuptools-scm'],
     )
